@@ -1,7 +1,13 @@
 import { Link, Outlet } from 'react-router-dom';
+import { useState } from 'react';
 
 const CountriesList = (props) => {
   const { countries } = props;
+  const [search, setSearch] = useState('')
+  function handleChange(event) {
+    event.preventDefault()
+    setSearch(event.target.value.toLowerCase())
+  }
   return (
     <div class="container">
       <div class="row">
@@ -10,7 +16,15 @@ const CountriesList = (props) => {
           style={{ maxHeight: '90vh', overflow: 'scroll' }}
         >
           <div className="list-group">
-            {countries.map((element, i) => {
+          <input className="form-control me-2" type="search" placeholder="Search" ariaLabel="Search" onChange={e=>handleChange(e)} />
+            {
+            countries.filter(elemF => {
+              if(search === ''){
+                return elemF
+              } else if(elemF.name.common.toLowerCase().includes(search)){
+                return elemF
+              }
+            }).map((element, i) => {
               return (
                 <Link
                   className="list-group-item list-group-item-action"
